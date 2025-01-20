@@ -1,0 +1,32 @@
+/* stories.css */
+.story-progress-bar {
+    transition: width 10ms linear;
+  }
+  
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .story-viewer {
+    animation: scaleIn 0.2s ease-out;
+  }
+  
+  .story-image {
+    transition: transform 0.3s ease-out;
+  }
+  
+  .story-image:active {
+    transform: scale(0.98);
+  }
+  
+  /* Add smooth transition for progress bars */
+  .progress-bar-fill {
+    transition: width 0.1s linear;
+  }
