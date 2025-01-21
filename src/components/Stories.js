@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 
 const STORY_DURATION = 5000; // 5 seconds per story
 
@@ -7,12 +7,13 @@ const Stories = () => {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [touchStart, setTouchStart] = useState(null);
   const [progress, setProgress] = useState(0);
   const progressTimer = useRef(null);
   const slideTimer = useRef(null);
+  const startTimeRef = useRef(null);
+  const pausedProgressRef = useRef(0);
 
-  // Sample data - replace with your actual data
+  // Sample data structure
   const data = {
     id: "3adb0aa2-4387-4fab-a8ed-4c38fc2334e4",
     campaign_type: "STR",
@@ -71,22 +72,126 @@ const Stories = () => {
             link: "https://app20.in/ios",
             button_text: "iOS Offer",
             order: 1
-          }
+          },
+          {
+            id: "59feb0e4-68ce-4c6a-a2b6-c34eb82322b4",
+            parent: "2f143cc1-93f8-4b3b-a23c-b2836b79cd25",
+            image:"https://appstorysmediabucket.s3.amazonaws.com/story_slides/WhatsApp_Image_2025-01-10_at_13.01.31_7eadf664.jpg",
+            video: null,
+            link: "https://app20.in/ios/1",
+            button_text: "iOS Offer 1",
+            order: 2
+            },
+            {
+              id: "45f756ed-7eaf-45ca-b057-dcd784f8909f",
+              parent: "2f143cc1-93f8-4b3b-a23c-b2836b79cd25",
+              image:
+              "https://appstorysmediabucket.s3.amazonaws.com/story_slides/WhatsApp_Image_2025-01-10_at_13.01.32_290dca51.jpg",
+              video: null,
+              link: "https://app20.in/ios/2",
+              button_text: "iOS Offer 2",
+              order: 3
+              },
+              {
+                id: "d9825fb3-0fa3-4db9-9801-e044c7936172",
+                parent: "2f143cc1-93f8-4b3b-a23c-b2836b79cd25",
+                image:
+                "https://appstorysmediabucket.s3.amazonaws.com/story_slides/WhatsApp_Image_2025-01-10_at_13.01.32_a5975c0b.jpg",
+                video: null,
+                link: "https://app20.in/ios/4",
+                button_text: "iOS Offer 4",
+                order: 4
+                }
         ]
       },
+
+      {
+        "id": "ba82ab84-86bb-4c67-97fd-620410523119",
+        "name": "Zupee",
+        "thumbnail":
+        "https://appstorysmediabucket.s3.amazonaws.com/story_groups/Group_22.png",
+        "ringColor": "#ffd500",
+        "nameColor": "#111111",
+        "order": 8,
+        "slides": [
+        {
+        "id": "d9afb861-cda2-484e-a714-ccddcd79f134",
+        "parent": "ba82ab84-86bb-4c67-97fd-620410523119",
+        "image":
+        "https://appstorysmediabucket.s3.amazonaws.com/story_slides/Frame_36.png",
+        "video": null,
+        "link": "https://app20.in/3",
+        "button_text": "Start Offer",
+        "order": 1
+        }
+        ]
+        },
+        {
+          "id": "128d0e25-cf02-4ce0-842f-fc36938701b6",
+          "name": "EloElo",
+          "thumbnail":
+          "https://appstorysmediabucket.s3.amazonaws.com/story_groups/eleelo.png",
+          "ringColor": "#fbff00",
+          "nameColor": "#000000",
+          "order": 9,
+          "slides": [
+          {
+          "id": "e19c3f6b-2108-474f-827c-beca7d3c1eb4",
+          "parent": "128d0e25-cf02-4ce0-842f-fc36938701b6",
+          "image":
+          "https://appstorysmediabucket.s3.amazonaws.com/story_slides/App-min.png",
+          "video": null,
+          "link": "https://app20.in/6",
+          "button_text": "EloElo App Offer",
+          "order": 1
+          }
+          ]
+          },
+          {
+            "id": "47bc5cbe-5deb-4fe3-8fbc-ba8de055702c",
+            "name": "New Offers",
+            "thumbnail":
+            "https://appstorysmediabucket.s3.amazonaws.com/story_groups/new-offer.png",
+            "ringColor": "#ffdd00",
+            "nameColor": "#000000",
+            "order": 10,
+            "slides": [
+            {
+            "id": "f6209a23-7c11-418c-97d2-a4b69155f74f",
+            "parent": "47bc5cbe-5deb-4fe3-8fbc-ba8de055702c",
+            "image":
+            "https://appstorysmediabucket.s3.amazonaws.com/story_slides/WhatsApp_Image_2025-01-10_at_12.31.32.jpeg",
+            "video": null,
+            "link": "https://app20.in/7",
+            "button_text": "Ludo Supreme Offer",
+            "order": 1
+            },
+            {
+            "id": "7e6f8afc-b3ff-4ddc-b9b4-759f8decfc56",
+            "parent": "47bc5cbe-5deb-4fe3-8fbc-ba8de055702c",
+            "image":
+            "https://appstorysmediabucket.s3.amazonaws.com/story_slides/WhatsApp_Image_2025-01-10_at_12.32.26.jpeg",
+            "video": null,
+            "link": "https://app20.in/8",
+            "button_text": "Pepperfry Offer",
+            "order": 2
+            }
+            ]
+          
+          }
       // ... other story groups
     ]
   };
+
   const startProgressTimer = () => {
     if (progressTimer.current) clearInterval(progressTimer.current);
     if (slideTimer.current) clearTimeout(slideTimer.current);
 
-    let startTime = Date.now();
-    setProgress(0);
-
+    startTimeRef.current = Date.now() - (pausedProgressRef.current * STORY_DURATION / 100);
+    
     progressTimer.current = setInterval(() => {
       if (!isPaused) {
-        const elapsedTime = Date.now() - startTime;
+        const elapsedTime = Date.now() - startTimeRef.current;
         const newProgress = (elapsedTime / STORY_DURATION) * 100;
         
         if (newProgress >= 100) {
@@ -97,13 +202,16 @@ const Stories = () => {
       }
     }, 10);
 
-    slideTimer.current = setTimeout(() => {
-      if (!isPaused) handleNext();
-    }, STORY_DURATION);
+    if (!isPaused) {
+      const remainingTime = STORY_DURATION * (1 - pausedProgressRef.current / 100);
+      slideTimer.current = setTimeout(() => {
+        handleNext();
+      }, remainingTime);
+    }
   };
 
   useEffect(() => {
-    if (selectedGroup) {
+    if (selectedGroup && !isPaused) {
       startProgressTimer();
     }
     return () => {
@@ -116,17 +224,23 @@ const Stories = () => {
     setSelectedGroup(group);
     setCurrentSlideIndex(0);
     setProgress(0);
+    setIsPaused(false);
+    pausedProgressRef.current = 0;
   };
 
   const handleClose = () => {
     setSelectedGroup(null);
     setCurrentSlideIndex(0);
     setProgress(0);
+    setIsPaused(false);
+    pausedProgressRef.current = 0;
   };
 
   const handleNext = () => {
     if (!selectedGroup) return;
 
+    pausedProgressRef.current = 0;
+    
     if (currentSlideIndex < selectedGroup.slides.length - 1) {
       setCurrentSlideIndex(prev => prev + 1);
       setProgress(0);
@@ -145,6 +259,8 @@ const Stories = () => {
   const handlePrevious = () => {
     if (!selectedGroup) return;
 
+    pausedProgressRef.current = 0;
+    
     if (currentSlideIndex > 0) {
       setCurrentSlideIndex(prev => prev - 1);
       setProgress(0);
@@ -158,33 +274,15 @@ const Stories = () => {
     }
   };
 
-  const handleTouchStart = (e) => {
-    setTouchStart(e.touches[0].clientX);
-    setIsPaused(true);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!touchStart) return;
-
-    const xDiff = touchStart - e.touches[0].clientX;
-
-    if (Math.abs(xDiff) > 50) {
-      if (xDiff > 0) {
-        handleNext();
-      } else {
-        handlePrevious();
-      }
-      setTouchStart(null);
+  const togglePause = () => {
+    if (!isPaused) {
+      // Pausing
+      pausedProgressRef.current = progress;
+      if (progressTimer.current) clearInterval(progressTimer.current);
+      if (slideTimer.current) clearTimeout(slideTimer.current);
     }
+    setIsPaused(!isPaused);
   };
-
-  const handleTouchEnd = () => {
-    setTouchStart(null);
-    setIsPaused(false);
-  };
-
-  const handleMouseDown = () => setIsPaused(true);
-  const handleMouseUp = () => setIsPaused(false);
 
   return (
     <div className="p-4">
@@ -218,15 +316,8 @@ const Stories = () => {
           ))}
         </div>
       ) : (
-        // Story Viewer
-        <div 
-          className="fixed inset-0 bg-black flex items-center justify-center z-50"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-        >
+        // Story Viewer with semi-transparent background
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
           {/* Progress bars */}
           <div className="absolute top-4 left-4 right-4 flex gap-1">
             {selectedGroup.slides.map((_, index) => (
@@ -244,27 +335,44 @@ const Stories = () => {
             ))}
           </div>
 
+          {/* Close button */}
           <button 
             onClick={handleClose}
-            className="absolute top-8 right-4 text-white p-2 hover:bg-gray-800 rounded-full transition-colors"
+            className="absolute top-8 right-4 text-white p-2 hover:bg-gray-800/50 rounded-full transition-colors z-20"
           >
             <X size={24} />
           </button>
-          
-          <div 
-            className="absolute left-0 w-1/4 h-full cursor-pointer"
-            onClick={handlePrevious}
-          />
-          <div 
-            className="absolute right-0 w-1/4 h-full cursor-pointer"
-            onClick={handleNext}
-          />
 
-          <div className="w-full max-w-lg px-4">
+          {/* Navigation buttons */}
+          <div className="absolute inset-0 flex items-center justify-between px-4 z-10">
+            <button
+              onClick={handlePrevious}
+              className="w-12 h-12 flex items-center justify-center bg-black/50 rounded-full text-white hover:bg-black/75 transition-all"
+            >
+              <ChevronLeft size={28} />
+            </button>
+
+            <button
+              onClick={togglePause}
+              className="w-12 h-12 flex items-center justify-center bg-black/50 rounded-full text-white hover:bg-black/75 transition-all"
+            >
+              {isPaused ? <Play size={28} /> : <Pause size={28} />}
+            </button>
+
+            <button
+              onClick={handleNext}
+              className="w-12 h-12 flex items-center justify-center bg-black/50 rounded-full text-white hover:bg-black/75 transition-all"
+            >
+              <ChevronRight size={28} />
+            </button>
+          </div>
+
+          {/* Story content */}
+          <div className="relative w-full max-w-lg h-full max-h-[80vh] flex items-center justify-center px-4">
             <img
               src={selectedGroup.slides[currentSlideIndex].image}
               alt={`Story ${currentSlideIndex + 1}`}
-              className="w-full h-auto rounded-lg"
+              className="w-full h-full object-contain rounded-lg"
             />
             
             {selectedGroup.slides[currentSlideIndex].button_text && (
